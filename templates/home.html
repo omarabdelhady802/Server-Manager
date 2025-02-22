@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% import 'common.html' as common %}
+
+{% block body_content %}
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="background-color: #F5F5F5;border-right-width: 2px; padding: 1%">
+            <div class="row">
+                <div class="col-12" style="padding: 1% ;height:720px">
+                    <h1 class="text-center" style="margin-top: 5px"> Server resources</h1>
+                    <hr>
+                    <p class="text-center fw-bold">CPU</p>
+
+                    {{ common.progress_bar('cpu_usage','Usage',cpu_percentage) }}
+
+                    <p class="text-center fw-bold">Memory</p>
+                    <div>
+                        <label>Total memory: </label> {{ memory_data['total_memory'] }} GB
+                    </div>
+                    <div>
+                        <label>Available memory: </label> {{ memory_data['available_memory'] }} GB
+                    </div>
+
+                    <div>
+                        <label>Used memory: </label> {{ memory_data['used_memory'] }} GB
+                    </div>
+                    <br>
+                    {{ common.progress_bar('memory_usage','Usage',memory_data['memory_usage_percentage']) }}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="row">
+                <div class="col-12" style="margin-bottom: 2%">
+                    <div style="text-align: right"> {{ moment(current_time).format('LLL') }}</div>
+                    <img src="{{ url_for('static', filename='imgs/andalusia_logo.png') }}"
+                         class="rounded mx-auto d-block" style="width: 25%; background-color: white; margin: 10px"
+                         alt="andalusia logo">
+                </div>
+            </div>
+
+            <div class="row center">
+
+
+                
+
+                {% for service in services %}
+                   <div class="col-3">
+                    {{ common.get_service_card(service) }}
+
+                   </div>
+                        
+
+                    
+                
+                {% endfor %}
+            </div>
+        
+    </div>
+
+    {% block scripts %}
+        {{ super() }}
+    {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+
+    <script>
+        function processMessage(id) {
+            $.ajax({
+                url: '/status/' + id ,
+                type: 'GET',
+                success: function(response) {
+                    var processed_message = response.key;
+                    $('#'+id).text("Status : "+response.key);
+                }
+            });
+        }
+    
+        $(document).ready(function() {
+          
+    
+            setInterval(function() {
+                for (var i = 0; i < 8; i++) {
+                   
+                    processMessage(i);
+                }
+            }, 3000); // Send messages every 3 seconds
+        });
+    </script>
+    <script>
+        async function update_ram_usage(id, usage_percentage){
+            let progressbar_type = 'info'
+            if (usage_percentage > 75){
+                progressbar_type = 'danger'
+            }
+            else if (usage_percentage > 50){
+                progressbar_type = 'warning'
+            }
+            let progress_parent_element = document.querySelector(`div#${id}_usage`);
+            let label_element= progress_parent_element.querySelector('label')
+            let div_element = label_element.nextElementSibling;
+            
+            div_element.setAttribute('style',`width: ${usage_percentage}%`);
+            class_type = div_element.className.match(/\bbg-\w+\b/);
+            div_element.classList.remove(class_type[0]);
+            label_element.innerHTML = `${usage_percentage}%`
+            div_element.classList.add(`bg-${progressbar_type}`)
+            console.log(usage_percentage);
+        }
+       
+        setInterval(() => {
+            fetch('/cpu_usage')
+            .then(response => response.json())
+            .then(data =>{
+                if (data.length =! 0 && ('cpu_usage' in data)){
+                    cpu_usage = parseFloat(data.cpu_usage)
+                    update_ram_usage('cpu', cpu_usage)
+                }
+            })
+
+            fetch('/memory_usage')
+            .then(response => response.json())
+            .then(data =>{
+                data = data.memory_usage
+                if (data.length =! 0 && ('memory_usage_percentage' in data)){
+                    memory_usage_percentage = parseFloat(data.memory_usage_percentage)
+                    update_ram_usage('memory', memory_usage_percentage)
+                }
+            })
+        }, 1000);
+        </script>
+</div>
+
+{% endblock %}

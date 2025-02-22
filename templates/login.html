@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{{ super() }}
+<link href="{{ url_for('static',filename='css/sign-in.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body_content %}
+<link href="{{ url_for('static',filename='css/sign-in.css') }}" rel="stylesheet">
+<main class="form-signin text-center" style="margin-top: 100px">
+    <form class="form-style" style="width: 30%;max-width: 500px;min-width: 400px; margin-left:auto; margin-right:auto; "
+        method="POST">
+        {{ form.hidden_tag() }}
+
+        <img class="mb-4" src="{{ url_for('static',filename='imgs/andalusia_logo.png') }}" alt="" height="50px">
+
+        <div class="form-floating sign_in_fields">
+            {{ form.username(class="form-control",placeholder="Username") }}
+            {{ form.username.label }}
+        </div>
+        <div class="form-floating sign_in_fields">
+            {{ form.password(class="form-control",placeholder="Password") }}
+            {{ form.password.label }}
+        </div>
+
+        <button class="w-75 btn btn-lg  sign_in_fields submit-btn" type="submit" name="submit">Sign in</button>
+    </form>
+</main>
+
+
+{% endblock %}

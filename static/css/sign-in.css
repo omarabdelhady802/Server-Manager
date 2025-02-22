@@ -1,0 +1,24 @@
+.sign_in_fields {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.form-style {
+    padding: 50px 50px 50px 70px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #AE8C67;
+    border-radius: 4px;
+
+}
+.submit-btn{
+    background-color: #AE8C67;
+    border-color: black;
+    color: white;
+}
+.submit-btn:hover{
+    background-color: white;
+    border-color: #AE8C67;
+    color: #AE8C67;
+}

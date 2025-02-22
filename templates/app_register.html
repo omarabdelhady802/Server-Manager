@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    {{ super() }}
+    <link href="{{ url_for('static',filename='css/sign-in.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body_content %}
+    <main class="form-signin text-center" style="margin-top: 100px">
+        <form class="form-style" style="width: 30%;max-width: 500px;min-width: 400px; margin-left:auto; margin-right:auto; " method="POST">
+            {{ form.hidden_tag() }}
+
+            <img class="mb-4" src="{{ url_for('static',filename='imgs/andalusia_logo.png') }}" alt="" height="50px">
+
+            <div class="form-floating sign_in_fields">
+                {{ form.new_app_name(class="form-control", placeholder="App Name") }}
+                {{ form.new_app_name.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_app_port(class="form-control", placeholder="Port") }}
+                {{ form.new_app_port.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_app_root_dir(class="form-control", placeholder="Root Dir") }}
+                {{ form.new_app_root_dir.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_main_file_name(class="form-control", placeholder="File name (ex. app.py)") }}
+                {{ form.new_main_file_name.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_start_app_bat_pth(class="form-control", placeholder="App's BATCH file") }}
+                {{ form.new_start_app_bat_pth.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_home_page_route(class="form-control", placeholder="Index Route") }}
+                {{ form.new_home_page_route.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_app_description(class="form-control", placeholder="App Description") }}
+                {{ form.new_app_description.label }}
+            </div>
+            <div class="form-floating sign_in_fields">
+                {{ form.new_photo_path(class="form-control", placeholder="Image path",value ="None") }}
+                {{ form.new_photo_path.label }}
+            </div>
+
+            <button class="w-75 btn btn-lg  sign_in_fields submit-btn" type="submit" name="submit">Submit</button>
+        </form>
+    </main>
+
+{% endblock %}

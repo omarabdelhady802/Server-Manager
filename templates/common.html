@@ -1,0 +1,60 @@
+{% macro progress_bar(id,label,percentage) %}
+    <div class="row align-items-center" style="margin-top: 15px;margin-bottom: 15px">
+        <div class="col-3">
+            <span class="fw-bold">{{ label }}: </span>
+        </div>
+        {% if percentage>75 %}
+            {% set type='danger' %}
+        {% elif percentage>50 %}
+            {% set type='warning' %}
+        {% else %}
+            {% set type='info' %}
+
+        {% endif %}
+        <div class="col-9">
+            <div class="progress" id="{{ id }}" role="progressbar" aria-label="{{ label }} usage" aria-valuenow="{{ percentage }}"
+                 aria-valuemin="0" aria-valuemax="100">
+                <label class="centered-element fw-bold"
+                       style=" position: absolute ; left: 46%;"> {{ percentage }}%</label>
+                <div class="progress-bar bg-{{ type }}" style="width: {{ percentage }}%;">
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endmacro %}
+
+{% macro get_service_card(service_obj) %}
+    {% if service_obj.photo_path == "None" %}
+        {% set img_url= url_for("static",filename='imgs/defualt_services.png') %}
+    {% else %}
+        {% set img_url= url_for('static',filename='imgs/'+ service_obj.photo_path ) %}
+
+    {% endif %}
+
+    <div class="col-3">
+        <div class="card center" style="width: 18rem; height: 30rem;">
+            <div class="text-center"><img src="{{ img_url }}" class="card-img-top" alt="..." style="width: 100%; height:150px">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ service_obj.app_name }}</h5>
+                <p class="card-text">{{ service_obj.app_description }}</p>
+                
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">App Port :{{service_obj.app_port}}</li>
+                <li class="list-group-item" id = "{{service_obj.id}}" >Status :</li>
+                <li class="list-group-item">CPU Usage :</li>
+                <li class="list-group-item">Memory Usage :</li>
+              </ul>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary">run service</a>
+                <a href="#" class="btn btn-light">close service</a>
+              </div>
+        </div>
+    </div>
+{% endmacro %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% block header %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css', _external=True) }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/custom_bootstrap.css', _external=True) }}" rel="stylesheet">
+    {% endblock %}
+
+    <title>
+        {% block title %}
+            Ai Server Manger
+
+        {% endblock %}
+    </title>
+</head>
+
+<body {% block  body_attrs %} {% endblock %}>
+
+<nav class="navbar sticky-top" style="background-color: #AE8C67;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Ai Server Manager</a>
+        {% if logged_in() %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                
+                <a class="nav-link active" aria-current="page" href="/app_register">App Registeration</a>
+                <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+</nav>
+{% for catrgory,message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ catrgory }} alert-dismissible">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {{ message }}
+    </div>
+{% endfor %}
+{% block body_content %}
+
+{% endblock %}
+
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js', _external=True) }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js', _external=True) }}"></script>
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>
